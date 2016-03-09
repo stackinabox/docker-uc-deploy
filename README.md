@@ -5,11 +5,23 @@ repo and follow the instructions in the README.md to build image.
 
 To run:
 
-Download UCD installer zip and extract it into 'artifacts' folder
+ - git clone https://github.com/stackinabox/docker-ibm-java.git and build it following the README.md in the repo
 
-Now just build and run the image:
+ - git clone https://github.com/stackinabox/docker-ibm-java.git
 
-docker build -t stackinabox/urbancode-deploy:%version% .
-docker run stackinabox/urbancode-deploy:latest
+ - Download UCD installer zip and extract it into 'artifacts' folder
+   You are on your own for finding this since it's a licensed product
 
-# use `docker ps` to view the port mappings
+ - Build the image:
+
+````
+	docker build -t stackinabox/urbancode-deploy:%version% .
+````
+
+ - Now you can run it using:
+
+````
+	docker run -d --name urbancode_deploy -e LICENSE=accept -p 7918:7918 -p 8080:8080 -p 8443:8443 stackinabox/urbancode-deploy:%version% 
+````
+
+ - you can get to the web console by pointing your browser at https://%your-docker-hostname%:8443  login with admin:admin
