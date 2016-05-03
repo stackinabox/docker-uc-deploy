@@ -12,7 +12,7 @@ before_install:
   - curl -O "https://$ARTIFACT_SERVER_HOSTNAME/urbancode/ibm-ucd/$UCD_STREAM.txt"
   - export UCD_VERSION=`cat $UCD_STREAM.txt`
   - curl -O "https://$ARTIFACT_SERVER_HOSTNAME/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
-  - unzip ibm-ucd.zip -d artifacts/
+  - unzip -q ibm-ucd.zip -d artifacts/
   - rm -f ibm-ucd.zip
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker build -t stackinabox/urbancode-deploy:$UCD_VERSION .
