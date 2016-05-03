@@ -21,7 +21,7 @@ curl -O "$ARTIFACT_URL/urbancode/ibm-ucd/$ARTIFACT_STREAM.txt"
 UCD_VERSION=`cat $ARTIFACT_STREAM.txt`  # i.e. latest or dev or qa or vnext etc... file will contain just the version number
 rm -f $ARTIFACT_STREAM.txt
 
-rm -rf artifacts/
+rm -rf artifacts/*
 curl -O "$ARTIFACT_URL/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
 unzip -q ibm-ucd.zip -d artifacts/
 rm -f ibm-ucd.zip
