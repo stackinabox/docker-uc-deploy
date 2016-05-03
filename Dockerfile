@@ -1,5 +1,3 @@
-FROM debian:wheezy
-
 # build local ibmcloud/ibm-java image first
 FROM stackinabox/ibm-java:7.1-3.3
 
