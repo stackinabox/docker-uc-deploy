@@ -11,7 +11,7 @@ env:
 before_install:
   - curl -O "https://$ARTIFACT_SERVER_HOSTNAME/urbancode/ibm-ucd/$UCD_STREAM.txt"
   - export UCD_VERSION=`cat $UCD_STREAM.txt`
-  - curl -O "https://s3.amazonaws.com/artifacts.stackinabox.io/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
+  - curl -O "https://$ARTIFACT_SERVER_HOSTNAME/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
   - unzip ibm-ucd.zip -d artifacts/
   - rm -f ibm-ucd.zip
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
