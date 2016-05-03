@@ -1,5 +1,3 @@
-FROM debian:wheezy
-
 # build local ibmcloud/ibm-java image first
 FROM stackinabox/ibm-java:7.1-3.3
 
@@ -16,7 +14,7 @@ ADD install.properties /tmp/install.properties
 
 # install the UCD Server and remove the install files.
 RUN apt-get update -qq && \
-	apt-get --no-install-recommends install -qq curl unzip > /dev/null \
+	apt-get --no-install-recommends install -qq curl unzip apt-utils > /dev/null \
   	&& rm -rf /var/lib/apt/lists/* && \
   	cat /tmp/install.properties >> /tmp/ibm-ucd-install/install.properties && \
 	sh /tmp/ibm-ucd-install/install-server.sh && \

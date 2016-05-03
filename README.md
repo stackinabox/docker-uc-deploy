@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/stackinabox/docker-uc-deploy.svg?branch=travis-ci)](https://travis-ci.org/stackinabox/docker-uc-deploy)
+
 This will install a new UCD server in a Docker container.
 This Dockerfile does not requires a local ibmcloud/ibm-java:latest docker
 image. Clone the https://github.com/stackinabox/docker-ibm-java.git
