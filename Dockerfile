@@ -16,11 +16,9 @@ ADD install.properties /tmp/install.properties
 RUN apt-get update -qq && \
 	apt-get --no-install-recommends install -qq curl unzip apt-utils > /dev/null \
   	&& rm -rf /var/lib/apt/lists/* && \
-  	cat /tmp/install.properties >> /tmp/ibm-ucd-install/install.properties
-	
-RUN sh /tmp/ibm-ucd-install/install-server.sh
-
-RUN rm -rf /tmp/ibm-ucd-install && \
+  	cat /tmp/install.properties >> /tmp/ibm-ucd-install/install.properties && \
+	sh /tmp/ibm-ucd-install/install-server.sh && \
+	rm -rf /tmp/ibm-ucd-install && \
 	rm -f /tmp/install.properties
 
 
