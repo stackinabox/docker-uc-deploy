@@ -6,12 +6,12 @@ services:
   - docker
 
 env:
-  - UCD_STREAM=latest
+  - UCD_STREAM=
   - UCD_VERSION=
 
 before_install:
   - curl -O "https://s3.amazonaws.com/artifacts.stackinabox.io/urbancode/ibm-ucd/$UCD_STREAM.txt"
-  - export UCD_VERSION=`cat latest.txt`
+  - export UCD_VERSION=`cat $UCD_STREAM.txt`
   - curl -O "https://s3.amazonaws.com/artifacts.stackinabox.io/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
   - unzip -q ibm-ucd.zip -d artifacts/
   - rm -f ibm-ucd.zip
