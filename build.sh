@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 #### 
 #  The following variables must be set in the build.rc file before executing this script
 ####
-#ARTIFACT_URL=
+ARTIFACT_URL=${ARTIFACT_URL:-http://artifactory.stackinabox.io/artifactory}
 #ARTIFACT_STREAM=
 
 #DOCKER_EMAIL=
@@ -15,14 +15,18 @@ source ./build.rc
 ####
 # UCD_VERSION will be read from the stream file on the artifact server so no need to set it
 ####
-UCD_VERSION=
-
-curl -O "$ARTIFACT_URL/urbancode/ibm-ucd/$ARTIFACT_STREAM.txt"
-UCD_VERSION=`cat $ARTIFACT_STREAM.txt`  # i.e. latest or dev or qa or vnext etc... file will contain just the version number
-rm -f $ARTIFACT_STREAM.txt
+UCD_VERSION=${UCD_VERSION:-latest}
+UCD_DOWNLOAD_URL="$ARTIFACT_URL/urbancode-snapshot-local/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
 
 rm -rf artifacts/*
-curl -O "$ARTIFACT_URL/urbancode/ibm-ucd/$UCD_VERSION/ibm-ucd.zip"
+
+echo "artifact url: $ARTIFACT_URL"
+echo "ucd version:  $UCD_VERSION"
+echo "ucd download url: $UCD_DOWNLOAD_URL"
+
+mkdir -p artifacts/
+
+curl -u$ARTIFACT_USERNAME:$ARTIFACT_PASSWORD -O $UCD_DOWNLOAD_URL
 unzip -q ibm-ucd.zip -d artifacts/
 rm -f ibm-ucd.zip
 
