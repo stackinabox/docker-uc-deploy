@@ -11,4 +11,4 @@ env:
 install: true
 
 script:
-  - build.sh
+  - ./build.sh
