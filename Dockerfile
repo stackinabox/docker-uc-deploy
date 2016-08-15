@@ -1,6 +1,7 @@
 FROM stackinabox/ibm-supervisord:3.2.2
 
 MAINTAINER Tim Pouyer <tpouyer@us.ibm.com>
+MAINTAINER Sudhakar Frederick <sudhakar@au1.ibm.com>
 
 # Pass in the location of the UCD install zip 
 ARG ARTIFACT_DOWNLOAD_URL 
@@ -10,14 +11,11 @@ ARG ARTIFACT_VERSION
 ADD startup.sh /opt/startup.sh
 ADD supervisord.conf /tmp/supervisord.conf
 
+#Copy in database setup scripts
+COPY ./ucddbinstall /opt/ucd/ucddbinstall/
+
 # Copy in installation properties
 ADD install.properties /tmp/install.properties
-
-# Pass in the location of the UCD agent cloud package tgz
-ENV AGENT_DOWNLOAD_URL=${AGENT_DOWNLOAD_URL:-} \
-	AGENT_VERSION=${AGENT_VERSION:-}
-
-ADD post-configure-add-cloud-agent-pkgs.sh /root/post-configure-add-cloud-agent-pkgs.sh
 
 # Expose Ports
 EXPOSE 8080
@@ -25,10 +23,17 @@ EXPOSE 8443
 EXPOSE 7918
 
 # install the UCD Server and remove the install files.
-RUN wget $ARTIFACT_DOWNLOAD_URL && \
+RUN wget -q $ARTIFACT_DOWNLOAD_URL && \
 	unzip -q ibm-ucd-$ARTIFACT_VERSION.zip -d /tmp && \
 	cat /tmp/install.properties >> /tmp/ibm-ucd-install/install.properties && \
+	/opt/ucd/ucddbinstall/replaceAntSQL.sh /tmp/ibm-ucd-install && \
+	cp /opt/ucd/ucddbinstall/*.jar /tmp/ibm-ucd-install/lib/ext/ && \
 	sh /tmp/ibm-ucd-install/install-server.sh && \
+	grep ZSQLFILE /tmp/ibm-ucd-install/install.log | cut -f 3- -d '_' > /opt/ucd/ucddbinstall/runsqls.txt && \
+	grep ZSQLSTMTBEGIN /tmp/ibm-ucd-install/install.log | cut -f2- -d '_' > /opt/ucd/ucddbinstall/execsql.sql && \
+	cp -r /tmp/ibm-ucd-install/opt/apache-ant-1.7.1 /opt/ibm-ucd/server/opt/ && \
+	cp /opt/ucd/ucddbinstall/ant-contrib.jar /opt/ibm-ucd/server/opt/apache-ant-1.7.1/lib/ && \
+	cp -r /tmp/ibm-ucd-install/database /opt/ibm-ucd/ && \
 	cat /tmp/supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf && \
 	rm -rf /tmp/ibm-ucd-install /tmp/install.properties /tmp/supervisord.conf ibm-ucd-$ARTIFACT_VERSION.zip
 
