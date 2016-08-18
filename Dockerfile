@@ -1,10 +1,9 @@
 FROM stackinabox/ibm-supervisord:3.2.2
 
-MAINTAINER Tim Pouyer <tpouyer@us.ibm.com>
 MAINTAINER Sudhakar Frederick <sudhakar@au1.ibm.com>
 
-# Pass in the location of the UCD install zip 
-ARG ARTIFACT_DOWNLOAD_URL 
+# Pass in the location of the UCD install zip
+ARG ARTIFACT_DOWNLOAD_URL
 ARG ARTIFACT_VERSION
 
 # Add startup.sh script and addtional supervisord config
@@ -31,9 +30,8 @@ RUN wget -q $ARTIFACT_DOWNLOAD_URL && \
 	sh /tmp/ibm-ucd-install/install-server.sh && \
 	grep ZSQLFILE /tmp/ibm-ucd-install/install.log | cut -f 3- -d '_' > /opt/ucd/ucddbinstall/runsqls.txt && \
 	grep ZSQLSTMTBEGIN /tmp/ibm-ucd-install/install.log | cut -f2- -d '_' > /opt/ucd/ucddbinstall/execsql.sql && \
-	cp -r /tmp/ibm-ucd-install/opt/apache-ant-1.7.1 /opt/ibm-ucd/server/opt/ && \
-	cp /opt/ucd/ucddbinstall/ant-contrib.jar /opt/ibm-ucd/server/opt/apache-ant-1.7.1/lib/ && \
-	cp -r /tmp/ibm-ucd-install/database /opt/ibm-ucd/ && \
+	chmod +x /opt/ucd/ucddbinstall/install-db.sh && \
+	cp -r /tmp/ibm-ucd-install/database /opt/ucd/ucddbinstall/ && \
 	cat /tmp/supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf && \
 	rm -rf /tmp/ibm-ucd-install /tmp/install.properties /tmp/supervisord.conf ibm-ucd-$ARTIFACT_VERSION.zip
 

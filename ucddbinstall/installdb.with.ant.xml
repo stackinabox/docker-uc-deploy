@@ -17,24 +17,19 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Properties
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <property name="src.dir" location="." />
-    <!-- the following SHOULD be read from the server installed.properties file
-    hibernate.connection.driver_class="com.mysql.jdbc.Driver" />
-    hibernate.connection.url="jdbc\:mysql\://localhost\:3306/ucd" />
-    hibernate.connection.username="ibm_ucd" />
-    database.type="mysql" />
--->
-    <property name="server.dir" location="/opt/ibm-ucd/server" />
-    <property file="${server.dir}/conf/server/installed.properties" />
     <property environment="env" />
+    <property name="src.dir" location="." />
+    <property name="server.dir" location="/opt/ibm-ucd/server" />
+    <property name="upgrade.server" value="n" />
+    <property name="install.root.dir" location="${basedir}" />
 
+    <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+    <property name="hibernate.connection.url" value="jdbc:mysql://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME}" />
+    <property name="hibernate.connection.username" value="${env.DATABASE_USER}" />
+    <property name="database.type" value="mysql" />
     <property name="hibernate.connection.password" value="${env.DATABASE_PASS}" />
     <property name="jdbc.jar" value="${server.dir}/lib/ext/mysql-connector-java-5.1.38-bin.jar" />
 
-    <property name="db.name" value="${env.DATABASE_NAME}" />
-    <property name="upgrade.server" value="n" />
-
-    <property name="install.root.dir" location="${basedir}" />
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Classpaths
@@ -46,15 +41,15 @@
     </path>
 
      <!-- =======================   usage  =================================
-    dummy: just prints properties 
+    dummy: just prints properties
     install-database: runs the SQL from a list of files in runsqls.txt
                       and the SQL contained in execsql.sql
-    create-database: connects to MySQL using root and creates UCD database                  
+    create-database: connects to MySQL using root and creates UCD database
  -->
     <target name="dummy" >
         <echoproperties/>
     </target>
-    <target name="all" depends="execSQLfiles,execsql">
+    <target name="all" depends="execSQLfiles,execsql,fixucdserverprops">
     </target>
     <target name="execSQLfiles" >
         <sleep seconds="10"/>
@@ -94,40 +89,13 @@
                <pathelement location="${jdbc.jar}"/>
             </classpath>
             </sql>
-
     </target>
-    <target name="create-database">
-    <property name="hibernate.connection.rootpassword" value="new_password" />
-    <!--change database name to mysql in hibernate.connection.url to allow db creation -->
-    <loadresource property="hibernate.connection.rooturl">
-      <propertyresource name="hibernate.connection.url"/>
-      <filterchain>
-        <tokenfilter>
-          <filetokenizer/>
-          <replacestring from="${db.name}" to="mysql"/>
-        </tokenfilter>
-      </filterchain>
-    </loadresource>
-    <sql
-        driver="${hibernate.connection.driver_class}"
-        url="${hibernate.connection.rooturl}"
-        userid="root"
-        password="${hibernate.connection.rootpassword}"
-        autocommit="true" >
-    <classpath>
-        <pathelement location="${jdbc.jar}"/>
-    </classpath>   
-    <transaction>
-        CREATE USER '${hibernate.connection.username}'@'localhost' IDENTIFIED BY '${hibernate.connection.password}';
-        CREATE DATABASE ${db.name} character set utf8 collate utf8_bin;
-        GRANT ALL ON ${db.name}.* TO '${hibernate.connection.username}'@'%' IDENTIFIED BY '${hibernate.connection.password}' WITH GRANT OPTION;
-    </transaction>
-    </sql>
-</target> 
-    <target name="migrate-database" >
-        <record name="${src.dir}/install.log" action="start"/>
-        <!-- for each sql in file do 
-        -->
-        <record name="${src.dir}/install.log" action="stop"/>
-    </target>
+<target name="fixucdserverprops">
+   <propertyfile file="${server.dir}/conf/server/installed.properties" >
+     <entry key="hibernate.connection.password"   value="${hibernate.connection.password}" />
+     <entry key="hibernate.connection.username"   value="${hibernate.connection.username}" />
+     <entry key="hibernate.connection.url"   value="jdbc:mysql://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME}" />
+     <entry key="rcl.server.url" value="${env.RCL_URL}">
+</propertyfile>
+</target>
 </project>
