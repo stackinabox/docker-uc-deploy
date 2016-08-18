@@ -13,6 +13,7 @@ fi
 echo "$IP_ADDRESS $PUBLIC_HOSTNAME" >> /etc/hosts
 
 #run db setup scripts
+sed -i "s/27000@licenses.example.com/${RCL_URL}/g" /opt/ucd/ucddbinstall/execsql.sql
 mkdir -p /tmp/ibm-ucd-install
 cp -r /opt/ucd/ucddbinstall/database/ /tmp/ibm-ucd-install
 cd /opt/ucd/ucddbinstall

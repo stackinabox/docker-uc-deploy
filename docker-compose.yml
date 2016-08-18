@@ -15,7 +15,7 @@ services:
     build:
       context: .
       args:
-        ARTIFACT_DOWNLOAD_URL: http://mediahost/ibm-ucd-6.2.1.2.801550.zip
+        ARTIFACT_DOWNLOAD_URL: http://${MEDIAHOST}/ibm-ucd-6.2.1.2.801550.zip
         ARTIFACT_VERSION: 6.2.1.2.801550
     image: stackinabox/urbancode-deploy:6.2.1.2.801550
     container_name: ucd

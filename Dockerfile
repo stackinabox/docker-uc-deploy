@@ -30,7 +30,7 @@ RUN wget -q $ARTIFACT_DOWNLOAD_URL && \
 	sh /tmp/ibm-ucd-install/install-server.sh && \
 	grep ZSQLFILE /tmp/ibm-ucd-install/install.log | cut -f 3- -d '_' > /opt/ucd/ucddbinstall/runsqls.txt && \
 	grep ZSQLSTMTBEGIN /tmp/ibm-ucd-install/install.log | cut -f2- -d '_' > /opt/ucd/ucddbinstall/execsql.sql && \
-	chmod +x /opt/ucd/ucddbinstall/install-db.sh && \
+	chmod +x /opt/ucd/ucddbinstall/install-db.sh /opt/startup.sh && \
 	cp -r /tmp/ibm-ucd-install/database /opt/ucd/ucddbinstall/ && \
 	cat /tmp/supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf && \
 	rm -rf /tmp/ibm-ucd-install /tmp/install.properties /tmp/supervisord.conf ibm-ucd-$ARTIFACT_VERSION.zip
