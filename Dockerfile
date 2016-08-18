@@ -26,7 +26,7 @@ EXPOSE 7918
 RUN wget -q $ARTIFACT_DOWNLOAD_URL && \
 	unzip -q ibm-ucd-$ARTIFACT_VERSION.zip -d /tmp && \
 	cat /tmp/install.properties >> /tmp/ibm-ucd-install/install.properties && \
-	/opt/ucd/ucddbinstall/replaceAntSQL.sh /tmp/ibm-ucd-install && \
+	sh /opt/ucd/ucddbinstall/replaceAntSQL.sh /tmp/ibm-ucd-install && \
 	cp /opt/ucd/ucddbinstall/*.jar /tmp/ibm-ucd-install/lib/ext/ && \
 	sh /tmp/ibm-ucd-install/install-server.sh && \
 	grep ZSQLFILE /tmp/ibm-ucd-install/install.log | cut -f 3- -d '_' > /opt/ucd/ucddbinstall/runsqls.txt && \
