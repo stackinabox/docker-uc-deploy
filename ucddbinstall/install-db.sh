@@ -41,6 +41,7 @@ export ANT_OPTS
 
 # run the install
 chmod +x "opt/apache-ant-${OUR_ANT_VERSION}/bin/ant"
+sleep 10
 opt/apache-ant-${OUR_ANT_VERSION}/bin/ant -nouserlib -noclasspath -f installdb.with.ant.xml
 
 # restore previous state
