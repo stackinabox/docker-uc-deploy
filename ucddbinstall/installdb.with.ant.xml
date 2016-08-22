@@ -96,6 +96,8 @@
      <entry key="hibernate.connection.username"   value="${hibernate.connection.username}" />
      <entry key="hibernate.connection.url"   value="jdbc:mysql://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME}" />
      <entry key="rcl.server.url" value="${env.RCL_URL}" />
+     <entry key="install.server.web.host" value="${env.DEPLOY_SERVER_URL}" />
+     <entry key="server.external.web.url" value="${env.RCL_URL}" />
 </propertyfile>
 </target>
 </project>
