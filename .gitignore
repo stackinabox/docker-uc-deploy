@@ -2,3 +2,5 @@ artifacts/
 *.zip
 .DS_Store
 build.rc
+
+latest.txt
