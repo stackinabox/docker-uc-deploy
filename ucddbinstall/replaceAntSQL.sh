@@ -43,4 +43,4 @@ perl -i -p0e 's/ant\.sql\(\n\s+driver(.*?)src:\s+(foreignKeysDdl|srcDir.*?)\)/pr
 #     [echo] ZSQLSTMTBEGIN_update sec_user set password = 'pbkdf2{dR1YvJGn4LIEIuTToYklfACT/WU=|40960|ABljor6kwqjtEkPSWU2j75q5J9A=}' where name = 'admin'
 #which can then be easily extracted using something like:
 #  grep ZSQLSTMTBEGIN install.log | cut -f2- -d '_'
-perl -i -p0e 's/ant\.sql\(\n\s+(\"\"\"(.*?)\"\"\")(.*?)extclasspath\)/println(\x27ZSQLSTMTBEGIN_\x27+\1.replaceAll("[\\n]", " "\))/smg' ${ucdMediaDir}/install/UCDeployInstaller.groovy
+perl -i -p0e 's/ant\.sql\(\n\s+(\"\"\"(.*?)\"\"\")(.*?)extclasspath\)/println(\x27ZSQLSTMTBEGIN_\x27+\1.replaceAll("[\\n]", " "\)+\x27;\x27)/smg' ${ucdMediaDir}/install/UCDeployInstaller.groovy

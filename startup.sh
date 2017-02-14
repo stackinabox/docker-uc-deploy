@@ -27,5 +27,4 @@ else
   exit $?
 fi
 
-
-/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+/usr/local/bin/wait-for-it.sh --host=$DATABASE_HOST --port=$DATABASE_PORT --timeout=60 -- /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

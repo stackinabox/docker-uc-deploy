@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 #### 
 #  The following variables must be set in the build.rc file before executing this script
@@ -31,8 +31,11 @@ echo "artifact version:  $AGENT_VERSION"
 echo "artifact download url: $AGENT_DOWNLOAD_URL"
 
 docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-docker build -t stackinabox/urbancode-deploy:$ARTIFACT_VERSION \
-				--build-arg ARTIFACT_DOWNLOAD_URL=$ARTIFACT_DOWNLOAD_URL \
-				--build-arg ARTIFACT_VERSION=$ARTIFACT_VERSION .
+docker build --tag="stackinabox/urbancode-deploy:$ARTIFACT_STREAM" \
+             --tag="stackinabox/urbancode-deploy:$ARTIFACT_VERSION" \
+             --build-arg ARTIFACT_DOWNLOAD_URL=$ARTIFACT_DOWNLOAD_URL \
+             --build-arg ARTIFACT_VERSION=$ARTIFACT_VERSION .
 
-docker push stackinabox/urbancode-deploy:$ARTIFACT_VERSION
+if [ -n "$PUBLISH" ]; then
+	docker push stackinabox/urbancode-deploy:$ARTIFACT_VERSION
+fi

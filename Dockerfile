@@ -10,14 +10,14 @@ ARG ARTIFACT_VERSION
 ADD startup.sh /opt/startup.sh
 ADD supervisord.conf /tmp/supervisord.conf
 
+# ADD wait-for-it.sh script
+ADD wait-for-it.sh /usr/local/bin
+
 #Copy in database setup scripts
 COPY ./ucddbinstall /opt/ucd/ucddbinstall/
 
 # Copy in installation properties
 ADD install.properties /tmp/install.properties
-
-# Add post configure add cloud agent pkgs script
-ADD post-configure-add-cloud-agent-pkgs.sh /root/post-configure-add-cloud-agent-pkgs.sh
 
 # Expose Ports
 EXPOSE 8080
@@ -29,7 +29,7 @@ ENV LICENSE=${LICENSE:-} \
     DATABASE_PASS=${DATABASE_PASS:-passw0rd} \
     DATABASE_NAME=${DATABASE_NAME:-ibm_ucd} \
     DATABASE_PORT=${DATABASE_PORT:-3306} \
-    DATABASE_HOST=${DATABASE_HOST:-} \
+    DATABASE_HOST=${DATABASE_HOST:-localhost} \
     DEPLOY_SERVER_URL=${DEPLOY_SERVER_URL:-http://localhost:8080} \
     DEPLOY_SERVER_HOSTNAME=${DEPLOY_SERVER_HOSTNAME:-localhost} \
     DEPLOY_SERVER_AUTH_TOKEN=${DEPLOY_SERVER_AUTH_TOKEN:-} \
@@ -50,8 +50,6 @@ RUN mkdir -p /cache && \
 	cp -r /tmp/ibm-ucd-install/database /opt/ucd/ucddbinstall/ && \
 	cat /tmp/supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf && \
 	rm -rf /tmp/ibm-ucd-install /tmp/install.properties /tmp/supervisord.conf ibm-ucd-$ARTIFACT_VERSION.zip
-
-VOLUME ["/cache"]
 
 ENTRYPOINT ["/opt/startup.sh"]
 CMD []
