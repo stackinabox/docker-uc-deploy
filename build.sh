@@ -6,7 +6,7 @@
 ARTIFACT_URL=${ARTIFACT_URL:-http://artifacts.stackinabox.io/urbancode/ibm-ucd}
 AGENT_URL=${AGENT_URL:-http://artifacts.stackinabox.io/urbancode/ibm-ucd-platform-agent-packages}
 
-source ./build.rc
+#source ./build.rc
 
 ####
 # UCD_VERSION will be read from the stream file on the artifact server so no need to set it
