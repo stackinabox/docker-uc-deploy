@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/stackinabox/docker-uc-deploy.svg?branch=travis-ci)](https://travis-ci.org/stackinabox/docker-uc-deploy)
+[![Build Status](https://travis-ci.org/stackinabox/docker-uc-deploy.svg?branch=master)](https://travis-ci.org/stackinabox/docker-uc-deploy)
 
 This will install a new UCD server in a Docker container connecting to a MySQL container.
 See the docker-compose.yml for an example of how to run.
